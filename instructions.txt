@@ -1,0 +1,14 @@
+PowerShell in Admin mode
+
+-- create network for the microservices to comunicate
+docker network create --attachable -d bridge mydockernetwork
+
+-- go to the folder were the docker-compose.yml file is and run the command:
+docker-compose up -d
+
+-- to run mongo run the cmd:
+docker run -it -d --name mongo-container -p 27017:27017 --network mydockernetwork --restart always -v mongodb_data_container:/data/db mongo:latest
+
+-- to run sql server in docker
+docker run -d --name sql-container --network mydockernetwork --restart always -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$tr0ngS@P@ssw0rd02' -e 'MSSQL_PID=Express' -p 1433:1433 mcr.microsoft.com/mssql/server:2017-latest-ubuntu 
+para se conectar : localhost sa $tr0ngS@P@ssw0rd02
