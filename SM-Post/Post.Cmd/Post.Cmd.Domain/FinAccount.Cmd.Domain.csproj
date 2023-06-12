@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\CQRS-ES\CQRS.Core\CQRS.Core.csproj" />
-    <ProjectReference Include="..\..\Post.Common\Post.Common.csproj" />
+    <ProjectReference Include="..\..\FinAccount.Common\FinAccount.Common.csproj" />
   </ItemGroup>
 
 </Project>
