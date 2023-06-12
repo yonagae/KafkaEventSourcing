@@ -19,6 +19,11 @@ using Post.Common.Events;
 var builder = WebApplication.CreateBuilder(args);
 
 BsonClassMap.RegisterClassMap<BaseEvent>();
+BsonClassMap.RegisterClassMap<NewFinAccountEvent>();
+BsonClassMap.RegisterClassMap<DebitFinAccountEvent>();
+BsonClassMap.RegisterClassMap<CreditFinAccountEvent>();
+BsonClassMap.RegisterClassMap<AddTransactionTypeEvent>();
+
 BsonClassMap.RegisterClassMap<PostCreatedEvent>();
 BsonClassMap.RegisterClassMap<MessageUpdatedEvent>();
 BsonClassMap.RegisterClassMap<PostLikedEvent>();
@@ -47,6 +52,16 @@ dispatcher.RegisterHandler<AddCommentCommand>(commandHandler.HandleAsync);
 dispatcher.RegisterHandler<EditCommentCommand>(commandHandler.HandleAsync);
 dispatcher.RegisterHandler<RemoveCommentCommand>(commandHandler.HandleAsync);
 dispatcher.RegisterHandler<DeletePostCommand>(commandHandler.HandleAsync);
+
+builder.Services.AddScoped<IEventSourcingHandler<FinAccountAggregate>, FinAccountEventSourcingHandler>();
+builder.Services.AddScoped<IFinAccountCommandHandler, FinAccountCommandHandler>();
+var finAccounntCommandHandler = builder.Services.BuildServiceProvider().GetRequiredService<IFinAccountCommandHandler>();
+dispatcher.RegisterHandler<NewFinAccountCommand>(finAccounntCommandHandler.HandleAsync);
+dispatcher.RegisterHandler<DebitFinAccountCommand>(finAccounntCommandHandler.HandleAsync);
+dispatcher.RegisterHandler<CreditFinAccountCommand>(finAccounntCommandHandler.HandleAsync);
+dispatcher.RegisterHandler<AddTransactionTypeCommand>(finAccounntCommandHandler.HandleAsync);
+
+
 builder.Services.AddSingleton<ICommandDispatcher>(_ => dispatcher);
 
 builder.Services.AddControllers();

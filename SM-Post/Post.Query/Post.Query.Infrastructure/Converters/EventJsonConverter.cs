@@ -36,6 +36,12 @@ namespace Post.Query.Infrastructure.Converters
                 nameof(CommentUpdatedEvent) => JsonSerializer.Deserialize<CommentUpdatedEvent>(json, options),
                 nameof(CommentRemovedEvent) => JsonSerializer.Deserialize<CommentRemovedEvent>(json, options),
                 nameof(PostRemovedEvent) => JsonSerializer.Deserialize<PostRemovedEvent>(json, options),
+
+                nameof(NewFinAccountEvent) => JsonSerializer.Deserialize<NewFinAccountEvent>(json, options),
+                nameof(DebitFinAccountEvent) => JsonSerializer.Deserialize<DebitFinAccountEvent>(json, options),
+                nameof(CreditFinAccountEvent) => JsonSerializer.Deserialize<CreditFinAccountEvent>(json, options),
+                nameof(AddTransactionTypeEvent) => JsonSerializer.Deserialize<AddTransactionTypeEvent>(json, options),
+
                 _ => throw new JsonException($"{typeDiscriminator} is not supported yet!")
             };
         }

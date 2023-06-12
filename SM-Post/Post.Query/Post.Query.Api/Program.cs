@@ -23,6 +23,10 @@ builder.Services.AddSingleton<DatabaseContextFactory>(new DatabaseContextFactory
 var dataContext = builder.Services.BuildServiceProvider().GetRequiredService<DatabaseContext>();
 dataContext.Database.EnsureCreated();
 
+builder.Services.AddScoped<IFinAccountRepository, FinAccountRepository>();
+builder.Services.AddScoped<ITransactionTypeRepository, TransactionTypeRepository>();
+builder.Services.AddScoped<IBalanceByTransactionTypeRepository, BalanceByTransactionTypeRepository>();
+
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<IQueryHandler, QueryHandler>();
@@ -38,7 +42,15 @@ dispatcher.RegisterHandler<FindPostByIdQuery>(queryHandler.HandleAsync);
 dispatcher.RegisterHandler<FindPostsByAuthorQuery>(queryHandler.HandleAsync);
 dispatcher.RegisterHandler<FindPostsWithCommentsQuery>(queryHandler.HandleAsync);
 dispatcher.RegisterHandler<FindPostsWithLikesQuery>(queryHandler.HandleAsync);
+
+
+builder.Services.AddScoped<IFinAccountQueryHandler, FinAccountQueryHandler>();
+var finAccountQueryHandler = builder.Services.BuildServiceProvider().GetRequiredService<IFinAccountQueryHandler>();
+var finAccountDispatcher = new FinAccountQueryDispatcher();
+finAccountDispatcher.RegisterHandler<FindFinAccountWithBalancesByIdQuery>(finAccountQueryHandler.HandleAsync);
+
 builder.Services.AddScoped<IQueryDispatcher<PostEntity>>(_ => dispatcher);
+builder.Services.AddScoped<IQueryDispatcher<FinAccountEntity>>(_ => finAccountDispatcher);
 
 builder.Services.AddControllers();
 builder.Services.AddHostedService<ConsumerHostedService>();

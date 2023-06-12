@@ -11,5 +11,13 @@ namespace Post.Query.Infrastructure.Handlers
         Task On(CommentUpdatedEvent @event);
         Task On(CommentRemovedEvent @event);
         Task On(PostRemovedEvent @event);
+
+
+        Task On(NewFinAccountEvent @event);
+        Task On(DebitFinAccountEvent @event);
+        Task On(CreditFinAccountEvent @event);
+        Task On(AddTransactionTypeEvent @event);
+
+
     }
 }
