@@ -13,13 +13,6 @@ namespace Post.Cmd.Api.Commands
             _eventSourcingHandler = eventSourcingHandler;
         }
 
-        public async Task HandleAsync(NewPostCommand command)
-        {
-            var aggregate = new PostAggregate(command.Id, command.Author, command.Message);
-
-            await _eventSourcingHandler.SaveAsync(aggregate);
-        }     
-
         public async Task HandleAsync(NewFinAccountCommand command)
         {
             var aggregate = new FinAccountAggregate(command.Owner);

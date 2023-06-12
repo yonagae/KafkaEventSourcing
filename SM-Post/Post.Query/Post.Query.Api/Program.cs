@@ -27,29 +27,16 @@ builder.Services.AddScoped<IFinAccountRepository, FinAccountRepository>();
 builder.Services.AddScoped<ITransactionTypeRepository, TransactionTypeRepository>();
 builder.Services.AddScoped<IBalanceByTransactionTypeRepository, BalanceByTransactionTypeRepository>();
 
-builder.Services.AddScoped<IPostRepository, PostRepository>();
-builder.Services.AddScoped<ICommentRepository, CommentRepository>();
-builder.Services.AddScoped<IQueryHandler, QueryHandler>();
 builder.Services.AddScoped<IEventHandler, Post.Query.Infrastructure.Handlers.EventHandler>();
 builder.Services.Configure<ConsumerConfig>(builder.Configuration.GetSection(nameof(ConsumerConfig)));
 builder.Services.AddScoped<IEventConsumer, EventConsumer>();
 
 // register query handler methods
-var queryHandler = builder.Services.BuildServiceProvider().GetRequiredService<IQueryHandler>();
-var dispatcher = new QueryDispatcher();
-dispatcher.RegisterHandler<FindAllPostsQuery>(queryHandler.HandleAsync);
-dispatcher.RegisterHandler<FindPostByIdQuery>(queryHandler.HandleAsync);
-dispatcher.RegisterHandler<FindPostsByAuthorQuery>(queryHandler.HandleAsync);
-dispatcher.RegisterHandler<FindPostsWithCommentsQuery>(queryHandler.HandleAsync);
-dispatcher.RegisterHandler<FindPostsWithLikesQuery>(queryHandler.HandleAsync);
-
 
 builder.Services.AddScoped<IFinAccountQueryHandler, FinAccountQueryHandler>();
 var finAccountQueryHandler = builder.Services.BuildServiceProvider().GetRequiredService<IFinAccountQueryHandler>();
 var finAccountDispatcher = new FinAccountQueryDispatcher();
 finAccountDispatcher.RegisterHandler<FindFinAccountWithBalancesByIdQuery>(finAccountQueryHandler.HandleAsync);
-
-builder.Services.AddScoped<IQueryDispatcher<PostEntity>>(_ => dispatcher);
 builder.Services.AddScoped<IQueryDispatcher<FinAccountEntity>>(_ => finAccountDispatcher);
 
 builder.Services.AddControllers();

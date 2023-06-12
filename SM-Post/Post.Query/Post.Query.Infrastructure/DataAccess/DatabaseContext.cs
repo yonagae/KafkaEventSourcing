@@ -32,8 +32,6 @@ namespace Post.Query.Infrastructure.DataAccess
                 .HasForeignKey(e => e.FinAccountId);
         }
 
-        public DbSet<PostEntity> Posts { get; set; }
-        public DbSet<CommentEntity> Comments { get; set; }
         public DbSet<FinAccountEntity> FinAccounts { get; set; }
         public DbSet<TransactionTypeEntity> TransactionTypes { get; set; }
         public DbSet<BalanceByTransactionTypeEntity> Balances { get; set; }

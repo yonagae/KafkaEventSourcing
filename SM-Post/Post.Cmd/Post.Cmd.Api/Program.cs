@@ -24,14 +24,6 @@ BsonClassMap.RegisterClassMap<DebitFinAccountEvent>();
 BsonClassMap.RegisterClassMap<CreditFinAccountEvent>();
 BsonClassMap.RegisterClassMap<AddTransactionTypeEvent>();
 
-BsonClassMap.RegisterClassMap<PostCreatedEvent>();
-BsonClassMap.RegisterClassMap<MessageUpdatedEvent>();
-BsonClassMap.RegisterClassMap<PostLikedEvent>();
-BsonClassMap.RegisterClassMap<CommentAddedEvent>();
-BsonClassMap.RegisterClassMap<CommentUpdatedEvent>();
-BsonClassMap.RegisterClassMap<CommentRemovedEvent>();
-BsonClassMap.RegisterClassMap<PostRemovedEvent>();
-
 // Add services to the container.
 builder.Services.Configure<CosmosDBConfig>(builder.Configuration.GetSection(nameof(CosmosDBConfig)));
 builder.Services.Configure<MongoDbConfig>(builder.Configuration.GetSection(nameof(MongoDbConfig)));
@@ -39,20 +31,10 @@ builder.Services.Configure<ProducerConfig>(builder.Configuration.GetSection(name
 builder.Services.AddScoped<IEventStoreRepository, EventStoreRepository>();
 builder.Services.AddScoped<IEventProducer, EventProducer>();
 builder.Services.AddScoped<IEventStore, EventStore>();
-builder.Services.AddScoped<IEventSourcingHandler<PostAggregate>, EventSourcingHandler>();
-builder.Services.AddScoped<ICommandHandler, CommandHandler>();
 
 // register command handler methods
-var commandHandler = builder.Services.BuildServiceProvider().GetRequiredService<ICommandHandler>();
-var dispatcher = new CommandDispatcher();
-dispatcher.RegisterHandler<NewPostCommand>(commandHandler.HandleAsync);
-dispatcher.RegisterHandler<EditMessageCommand>(commandHandler.HandleAsync);
-dispatcher.RegisterHandler<LikePostCommand>(commandHandler.HandleAsync);
-dispatcher.RegisterHandler<AddCommentCommand>(commandHandler.HandleAsync);
-dispatcher.RegisterHandler<EditCommentCommand>(commandHandler.HandleAsync);
-dispatcher.RegisterHandler<RemoveCommentCommand>(commandHandler.HandleAsync);
-dispatcher.RegisterHandler<DeletePostCommand>(commandHandler.HandleAsync);
 
+var dispatcher = new CommandDispatcher();
 builder.Services.AddScoped<IEventSourcingHandler<FinAccountAggregate>, FinAccountEventSourcingHandler>();
 builder.Services.AddScoped<IFinAccountCommandHandler, FinAccountCommandHandler>();
 var finAccounntCommandHandler = builder.Services.BuildServiceProvider().GetRequiredService<IFinAccountCommandHandler>();

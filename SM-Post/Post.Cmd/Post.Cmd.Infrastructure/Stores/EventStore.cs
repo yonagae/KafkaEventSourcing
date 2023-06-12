@@ -46,7 +46,7 @@ namespace Post.Cmd.Infrastructure.Stores
                 {
                     TimeStamp = DateTime.Now,
                     AggregateIdentifier = aggregateId,
-                    AggregateType = nameof(PostAggregate),
+                    AggregateType = nameof(FinAccountAggregate),
                     Version = version,
                     EventType = eventType,
                     EventData = @event
